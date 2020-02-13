@@ -191,12 +191,12 @@
           if (matrix[i][j] === 1) {
             //save i+1 and j+1 to variables
             var newRow = i + 1;
-            var newCol = i + 1;
+            var newCol = j + 1;
             //new for loop to check diagonal from where we found 1
             //start iterating through rows
             for (var l = newRow; l < matrix.length; l++) {
               //if diagonal from saved value is a 1
-              if(matrix[newRow][newCol] === 1) {
+              if (matrix[l][newCol] === 1) {
               //return true
                 return true;
               } else {
@@ -217,42 +217,45 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      var diagCount = 0;
-      var rows = this.rows();
-
-      for (var i = 0; i < rows.length; i++) {
-        if (rows[i][minorDiagonalColumnIndexAtFirstRow] === 1) {
-          diagCount++;
+      // grab matrix
+      var matrix = this.rows();
+      // start looping from second row
+      for ( var i = 1; i < matrix.length; i++) {
+        // check if the minor diagonal has conflict
+        if (matrix[i][minorDiagonalColumnIndexAtFirstRow - i] === 1) {
+          return true;
         }
-        minorDiagonalColumnIndexAtFirstRow--;
       }
-
-      if (diagCount > 1) {
-        return true;
-      }
-
-      return false; // fixme
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var diagCount = 0;
-      var rows = this.rows();
-      var extra = 2 * (rows.length) - 2;
-
-      for (var i = 0; i < rows.length; i++) {
-        // return this.hasMajorDiagonalConflictAt(n);
-        for (var j = extra; j < 0; j--) {
-          if (rows[i][j] === 1) {
-            diagCount++;
+      //grab the matrix
+      var matrix = this.rows();
+      //loop through rows
+      for (var i = 0; i < matrix.length; i++) {
+        //loop through columns
+        for (var j = 0; j < matrix.length; j++) {
+          //if we find a queen
+          if (matrix[i][j] === 1) {
+            //variable to indicate where we start checking diagonal from
+            var newRow = i + 1;
+            var newCol = j - 1;
+            //loop from diagonal checkpoint
+            for (var l = newRow; l < matrix.length; l++) {
+              //if we find queen along diagonal
+              if (matrix[l][newCol] === 1) {
+                //return true
+                return true;
+              } else {
+                //decrease coliumn index
+                newCol--;
+              }
+            }
           }
         }
       }
-
-      if (diagCount > 1) {
-        return true;
-      }
-
       return false; // fixme
     }
 
